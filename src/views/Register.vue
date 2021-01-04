@@ -6,25 +6,25 @@
     </div>
     <form @submit.prevent="registerUser({ email, password })">
       <input
-        class="form-control"
+        class="form-control mb-2"
         type="email"
         placeholder="email"
         v-model.trim="email"
       />
       <input
-        class="form-control"
+        class="form-control mb-2"
         type="password"
         placeholder="password"
         v-model.trim="password"
       />
       <input
-        class="form-control"
+        class="form-control mb-2"
         type="password"
         placeholder="confirm password"
         v-model.trim="confirm_password"
       />
       <button
-        class="btn btn-primary w-100"
+        class="btn btn-primary"
         type="submit"
         :disabled="isSubmitDisabled"
       >

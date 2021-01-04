@@ -6,18 +6,18 @@
     </div>
     <form @submit.prevent="logInUser({ email, password })">
       <input
-        class="form-control"
+        class="form-control mb-2"
         type="email"
         placeholder="email"
         v-model="email"
       />
       <input
-        class="form-control"
+        class="form-control mb-2"
         type="password"
         placeholder="password"
         v-model="password"
       />
-      <button class="btn btn-primary w1">Log in</button>
+      <button class="btn btn-primary">Log in</button>
     </form>
   </div>
 </template>

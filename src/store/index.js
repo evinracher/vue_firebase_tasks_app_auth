@@ -7,7 +7,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: null,
+    user: { email: '', id: '' },
     tasks: [],
     task: { name: '', id: '' },
     error: null
@@ -36,7 +36,6 @@ export default new Vuex.Store({
     registerUser({ commit }, user) {
       auth.createUserWithEmailAndPassword(user.email, user.password)
         .then(res => {
-          console.log(res)
           const { uid, email } = res.user
 
           db.collection(email).add({
@@ -97,7 +96,6 @@ export default new Vuex.Store({
     createTask({ commit, state }, name) {
       db.collection(state.user.email).add({ name })
         .then(doc => {
-          console.log(doc.id)
           router.push('/')
         })
     },

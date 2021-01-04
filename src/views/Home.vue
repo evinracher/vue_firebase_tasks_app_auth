@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h1>Tasks App</h1>
+    <h3>Tasks</h3>
     <router-link to="/create">
       <button class="btn btn-success w-100">Add new task</button>
     </router-link>
-    <ul class="list-group mt-5">
+    <ul class="list-group mt-3">
       <li class="list-group-item" v-for="task in tasks" :key="task.id">
-        {{ task.id }} - {{ task.name }}
+        {{ task.name }}
         <div class="float-right">
           <router-link
             :to="{ name: 'Edit', params: { id: task.id } }"
