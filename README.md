@@ -1,5 +1,7 @@
 # auth-firebase
 
+Running on: https://tasksauthvue2.web.app/
+
 ## Project setup
 ```
 npm install
