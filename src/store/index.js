@@ -10,14 +10,24 @@ export default new Vuex.Store({
     user: { email: '', id: '' },
     tasks: [],
     task: { name: '', id: '' },
-    error: null
+    error: null,
+    loading: false,
+    text: ''
   },
   mutations: {
     setUser(state, payload) {
       state.user = payload
     },
     setError(state, payload) {
-      state.error = payload
+      switch (payload.code) {
+        case "auth/wrong-password":
+        case "auth/user-not-found":
+          state.error = "Incorrect email or password."
+          break;
+        default:
+          state.error = payload.message
+          break;
+      }
     },
     setTasks(state, payload) {
       state.tasks = payload
@@ -27,9 +37,18 @@ export default new Vuex.Store({
     },
     deleteTask(state, payload) {
       state.tasks = state.tasks.filter(task => task.id !== payload)
+    },
+    setLoading(state, payload) {
+      state.loading = payload
+    },
+    setText(state, payload) {
+      state.text = payload
     }
   },
   actions: {
+    search({ commit }, payload) {
+      commit('setText', payload)
+    },
     setUser({ commit }, user) {
       commit('setUser', user)
     },
@@ -47,7 +66,6 @@ export default new Vuex.Store({
           router.push('/')
         })
         .catch(error => {
-          console.log(error)
           commit('setError', error)
         })
     },
@@ -59,16 +77,17 @@ export default new Vuex.Store({
           router.push('/')
         })
         .catch(error => {
-          console.log(error)
           commit('setError', error)
         })
     },
     logOutUser({ commit }) {
       auth.signOut().catch(error => console.log(error))
       // commit('setUser', null)
+      commit('setError', { code: null })
       router.push('/login')
     },
     getTasks({ commit, state }) {
+      commit('setLoading', true)
       const tasks = []
       db.collection(state.user.email).get()
         .then(res => {
@@ -77,6 +96,7 @@ export default new Vuex.Store({
             tasks.push(task)
           })
           commit('setTasks', tasks)
+          commit('setLoading', false)
         })
     },
     getTask({ commit, state }, id) {
@@ -94,8 +114,10 @@ export default new Vuex.Store({
         })
     },
     createTask({ commit, state }, name) {
+      commit('setLoading', true)
       db.collection(state.user.email).add({ name })
         .then(doc => {
+          commit('setLoading', false)
           router.push('/')
         })
     },
@@ -110,6 +132,9 @@ export default new Vuex.Store({
   getters: {
     loggedUser: state => {
       return state.user ? true : false;
+    },
+    filteredTasks: state => {
+      return state.tasks.filter(task => task.name.toLowerCase().includes(state.text.toLowerCase()))
     }
   },
   modules: {
